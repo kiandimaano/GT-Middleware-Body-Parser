@@ -27,6 +27,16 @@ export const updatePost = (id, postData) => {
     return posts[postIndex];
 };
 
+export const partiallyUpdatePost = (id, postData) => {
+    const postIndex = posts.findIndex(p => p.id === id);
+    if (postIndex === -1) {
+        return null;
+    }
+    // For partial update, only update the fields that are provided
+    posts[postIndex] = { ...posts[postIndex], ...postData };
+    return posts[postIndex];
+};
+
 export const deletePost = (id) => {
     const postIndex = posts.findIndex(p => p.id === id);
     if (postIndex === -1) {
