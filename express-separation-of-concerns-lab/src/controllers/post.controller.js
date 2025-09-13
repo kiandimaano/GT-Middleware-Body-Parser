@@ -1,18 +1,18 @@
 import * as postService from '../services/post.service.js';
+import { ApiResponse } from '../utils/ApiResponse.js';
+import asyncHandler from 'express-async-handler';
 
 /* export const getAllPosts = (req, res) => {
     const posts = postService.getAllPosts();
     res.json(posts);
 }; */
 
-export const getAllPosts = async (req, res) => {
-    try {
-        const posts = await postService.getAllPosts();
-        res.json(posts);
-    } catch (error) {
-        res.status(500).json({ message: 'Error retrieving posts', error: error.message });
-    }
-};
+export const getAllPosts = asyncHandler(async (req, res) => {
+    const posts = await postService.getAllPosts();
+    return res
+        .status(200)
+        .json(new ApiResponse(200, posts, "Posts retrieved successfully"));
+});
 
 /* export const getPostById = (req, res) => {
     const postId = parseInt(req.params.id, 10);
@@ -23,18 +23,14 @@ export const getAllPosts = async (req, res) => {
     res.json(post);
 }; */
 
-export const getPostById = async (req, res) => {
-    try {
-        const postId = parseInt(req.params.id, 10);
-        const post = await postService.getPostById(postId);
-        if (!post) {
-            return res.status(404).json({ message: 'Post not found.' });
-        }
-        res.json(post);
-    } catch (error) {
-        res.status(500).json({ message: 'Error retrieving post', error: error.message });
-    }
-};
+export const getPostById = asyncHandler(async (req, res) => {
+    const postId = parseInt(req.params.id, 10);
+    const post = await postService.getPostById(postId);
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, post, "Post retrieved successfully"));
+});
 
 /* export const createPost = (req, res) => {
     const { title, content } = req.body;
@@ -45,18 +41,12 @@ export const getPostById = async (req, res) => {
     res.status(201).json(newPost);
 }; */
 
-export const createPost = async (req, res) => {
-    try {
-        const { title, content } = req.body;
-        if (!title || !content) {
-            return res.status(400).json({ message: 'Title and content are required.' });
-        }
-        const newPost = await postService.createPost({ title, content });
-        res.status(201).json(newPost);
-    } catch (error) {
-        res.status(500).json({ message: 'Error creating post', error: error.message });
-    }
-};
+export const createPost = asyncHandler(async (req, res) => {
+    const newPost = await postService.createPost(req.body);
+    return res
+        .status(201)
+        .json(new ApiResponse(201, newPost, "Post created successfully"));
+});
 
 /* export const updatePost = (req, res) => {
     const postId = parseInt(req.params.id, 10);
@@ -67,18 +57,13 @@ export const createPost = async (req, res) => {
     res.json(post);
 }; */
 
-export const updatePost = async (req, res) => {
-    try {
-        const postId = parseInt(req.params.id, 10);
-        const post = await postService.updatePost(postId, req.body);
-        if (!post) {
-            return res.status(404).json({ message: 'Post not found.' });
-        }
-        res.json(post);
-    } catch (error) {
-        res.status(500).json({ message: 'Error updating post', error: error.message });
-    }
-};
+export const updatePost = asyncHandler(async (req, res) => {
+    const postId = parseInt(req.params.id, 10);
+    const post = await postService.updatePost(postId, req.body);
+    return res
+        .status(200)
+        .json(new ApiResponse(200, post, "Post updated successfully"));
+});
 
 /* export const partiallyUpdatePost = (req, res) => {
         const postId = parseInt(req.params.id, 10);
@@ -89,18 +74,13 @@ export const updatePost = async (req, res) => {
         res.json(post);
     };*/
 
-export const partiallyUpdatePost = async (req, res) => {
-    try {
-        const postId = parseInt(req.params.id, 10);
-        const post = await postService.partiallyUpdatePost(postId, req.body);
-        if (!post) {
-            return res.status(404).json({ message: 'Post not found.' });
-        }
-        res.json(post);
-    } catch (error) {
-        res.status(500).json({ message: 'Error updating post', error: error.message });
-    }
-};
+export const partiallyUpdatePost = asyncHandler(async (req, res) => {
+    const postId = parseInt(req.params.id, 10);
+    const post = await postService.partiallyUpdatePost(postId, req.body);
+    return res
+        .status(200)
+        .json(new ApiResponse(200, post, "Post updated successfully"));
+});
 
 /* export const deletePost = (req, res) => {
         const postId = parseInt(req.params.id, 10);
@@ -111,15 +91,8 @@ export const partiallyUpdatePost = async (req, res) => {
         res.status(204).send();
     }; */
 
-export const deletePost = async (req, res) => {
-    try {
-        const postId = parseInt(req.params.id, 10);
-        const success = await postService.deletePost(postId);
-        if (!success) {
-            return res.status(404).json({ message: 'Post not found.' });
-        }
-        res.status(204).send();
-    } catch (error) {
-        res.status(500).json({ message: 'Error deleting post', error: error.message });
-    }
-};
+export const deletePost = asyncHandler(async (req, res) => {
+    const postId = parseInt(req.params.id, 10);
+    await postService.deletePost(postId);
+    return res.status(204).send();
+});
