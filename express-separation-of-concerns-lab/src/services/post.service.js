@@ -8,7 +8,6 @@ export const getAllPosts = async () => {
             p.title,
             p.content,
             p.authorId,
-            p.createdAt,
             u.username AS authorUsername,
             u.email AS authorEmail
         FROM 
@@ -26,7 +25,6 @@ export const getPostById = async (id) => {
             p.title,
             p.content,
             p.authorId,
-            p.createdAt,
             u.username AS authorUsername,
             u.email AS authorEmail
         FROM 
@@ -55,6 +53,7 @@ export const createPost = async (PostData) => {
         if (error.code === 'ER_NO_REFERENCED_ROW_2') {
             throw new ApiError(400, "Invalid authorId: Author does not exist");
         }
+        throw error;
     }
 };
 
