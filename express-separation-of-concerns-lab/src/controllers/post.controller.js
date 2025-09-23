@@ -96,3 +96,11 @@ export const deletePost = asyncHandler(async (req, res) => {
     await postService.deletePost(postId);
     return res.status(204).send();
 });
+
+export const getPostsByUserId = asyncHandler(async (req, res) => {
+    const userId = parseInt(req.params.userId, 10);
+    const posts = await postService.getPostsByUserId(userId);
+    return res
+        .status(200)
+        .json(new ApiResponse(200, posts, "Posts retrieved successfully"));
+});
