@@ -6,16 +6,18 @@ import { authMiddleware } from '../middlewares/auth.middleware.js';
 
 const router = Router();
 
+// Public routes (no authentication required)
 router.get('/', postController.getAllPosts);
 router.get('/:id', postController.getPostById);
-router.put('/:id', validatePost, postController.updatePost);
-router.patch('/:id', postController.partiallyUpdatePost); // We should create a separate validator for patch later
-router.delete('/:id', postController.deletePost);
 
+// Protected routes (authentication required)
+router.post('/', authMiddleware, validatePost, postController.createPost);
+router.put('/:id', authMiddleware, validatePost, postController.updatePost);
+router.delete('/:id', authMiddleware, postController.deletePost);
+router.patch('/:id', authMiddleware, postController.partiallyUpdatePost); // We should create a separate validator for patch later
+
+// Comment routes
 router.get('/:postId/comments', commentController.getCommentsByPostId);
 router.post('/:postId/comments', validateComment, commentController.createCommentForPost);
-
-// PROTECT THIS ROUTE: A user must be logged in to create a post
-router.post('/', authMiddleware, validatePost, postController.createPost);
 
 export default router;

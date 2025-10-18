@@ -15,15 +15,13 @@ const port = 3000;
 app.use(express.json());
 
 // Mount the routes
-app.use('/api/posts', postRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/comments', commentRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/comments', commentRoutes);
 
 // CENTRAL ERROR HANDLER MIDDLEWARE
+// This must be the LAST middleware in the chain
 app.use(errorHandler);
 
 app.listen(port, () => {

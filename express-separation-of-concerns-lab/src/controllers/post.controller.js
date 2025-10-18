@@ -62,10 +62,11 @@ export const createPost = asyncHandler(async (req, res) => {
 
 export const updatePost = asyncHandler(async (req, res) => {
     const postId = parseInt(req.params.id, 10);
-    const post = await postService.updatePost(postId, req.body);
-    return res
-        .status(200)
-        .json(new ApiResponse(200, post, "Post updated successfully"));
+    const postData = req.body;
+    const userId = req.user.id; // Get the user ID from the middleware
+
+    const updatedPost = await postService.updatePost(postId, postData, userId);
+    res.status(200).json(new ApiResponse(200, updatedPost, "Post updated successfully"));
 });
 
 /* export const partiallyUpdatePost = (req, res) => {
@@ -96,8 +97,10 @@ export const partiallyUpdatePost = asyncHandler(async (req, res) => {
 
 export const deletePost = asyncHandler(async (req, res) => {
     const postId = parseInt(req.params.id, 10);
-    await postService.deletePost(postId);
-    return res.status(204).send();
+    const userId = req.user.id; // Get the user ID from the middleware
+
+    await postService.deletePost(postId, userId);
+    res.status(200).json(new ApiResponse(200, null, "Post deleted successfully"));
 });
 
 export const getPostsByUserId = asyncHandler(async (req, res) => {
