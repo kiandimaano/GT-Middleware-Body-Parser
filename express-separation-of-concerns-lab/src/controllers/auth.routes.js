@@ -2,7 +2,7 @@
 import { Router } from 'express';
 import * as authController from '../controllers/auth.controller.js';
 // We'll add a new validator for login
-import { validateRegistration } from '../middlewares/validator.middleware.js';
+import { validateRegistration, validateLogin } from '../middlewares/validator.middleware.js';
 
 const router = Router();
 

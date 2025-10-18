@@ -6,6 +6,8 @@ import authRoutes from './src/routes/auth.routes.js';
 import { testConnection } from './src/config/db.js'; // Import the test function
 import { errorHandler } from './src/middlewares/errorHandler.middleware.js';
 import userRoutes from './src/routes/user.routes.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 const port = 3000;
